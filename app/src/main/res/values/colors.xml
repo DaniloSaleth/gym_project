@@ -10,5 +10,6 @@
     <color name="yellow">#FFAB00</color>
     <color name="et_color">#333333</color>
     <color name="searchBarLayout">#C4C4C4</color>
+    <color name="et_bg">#E8E8E8</color>
 
 </resources>
