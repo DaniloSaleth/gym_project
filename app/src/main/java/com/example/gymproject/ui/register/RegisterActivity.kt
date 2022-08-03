@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Toast
 import com.example.gymproject.Constants
 import com.example.gymproject.Constants.db
@@ -35,6 +36,10 @@ class RegisterActivity : AppCompatActivity() {
 
                 TextUtils.isEmpty(binding.etRegisterPassword.text.toString().trim(){it<=' '}) ->{
                     Toast.makeText(this, "Please enter Password.", Toast.LENGTH_SHORT).show()
+                }
+
+                binding.etRegisterPassword.text.toString() != binding.etRegisterConfirmPassword.text.toString() ->{
+                    Toast.makeText(this, "Password confirmation is different from password.", Toast.LENGTH_SHORT).show()
                 }
 
                 else -> {

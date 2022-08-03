@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Gym Project</string>
+    <string name="welcomingFrase">Bem-vindo(a)!\nMonte seus treinos e exercícios!</string>
+
 </resources>
