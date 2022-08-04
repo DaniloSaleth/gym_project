@@ -7,8 +7,11 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import com.example.gymproject.Constants
+import com.example.gymproject.Constants.USER_DATA
 import com.example.gymproject.Constants.db
 import com.example.gymproject.databinding.ActivityRegisterBinding
+import com.example.gymproject.model.Exercicio
+import com.example.gymproject.model.Treino
 import com.example.gymproject.ui.home.HomeActivity
 import com.example.gymproject.ui.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -55,16 +58,14 @@ class RegisterActivity : AppCompatActivity() {
                                     Toast.LENGTH_SHORT)
                                     .show()
 
-                                Constants.USER_DATA.user_id = firebaseUser.uid
-                                Constants.USER_DATA.email_id = email
+                                USER_DATA.user_id = firebaseUser.uid
+                                USER_DATA.email_id = email
 
                                 val data = hashMapOf(
-                                    "my_gallery" to "",
-                                    "favorites" to "",
-                                    "watched" to "",
-                                    "to_watch" to ""
+                                    "treino" to emptyList<Treino>(),
+                                    "exercicio" to emptyList<Exercicio>()
                                 )
-                                db.collection("user").document(Constants.USER_DATA.user_id).set(data)
+                                db.collection("user").document(USER_DATA.user_id).set(data)
 
                                 val intent = Intent(this, HomeActivity::class.java)
                                 startActivity(intent)
