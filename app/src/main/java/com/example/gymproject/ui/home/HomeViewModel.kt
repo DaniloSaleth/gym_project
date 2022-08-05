@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gymproject.model.Treino
-import com.example.gymproject.repository.treino.TreinoRepositoryImpl
+import com.example.gymproject.repository.treino.TreinoRepository
 import com.example.gymproject.repository.treino.TreinoRepositoryStatus
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val repository: TreinoRepositoryImpl) : ViewModel() {
+class HomeViewModel(private val repository: TreinoRepository) : ViewModel() {
 
     private val _treino = MutableLiveData<List<Treino>>()
     val treino: LiveData<List<Treino>>

@@ -4,6 +4,7 @@ import com.example.gymproject.repository.exercicio.ExercicioRepository
 import com.example.gymproject.repository.exercicio.ExercicioRepositoryImpl
 import com.example.gymproject.repository.treino.TreinoRepository
 import com.example.gymproject.repository.treino.TreinoRepositoryImpl
+import com.example.gymproject.ui.exercicio.ExercicioViewModel
 import com.example.gymproject.ui.home.HomeViewModel
 import com.example.gymproject.ui.treino.TreinoViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -27,5 +28,9 @@ val viewModels = module {
 
     viewModel {
         TreinoViewModel(get(),get())
+    }
+
+    viewModel {
+        ExercicioViewModel(get())
     }
 }

@@ -44,10 +44,6 @@ class LoginActivity : AppCompatActivity() {
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 val firebaseUser: FirebaseUser = task.result.user!!
-                                Toast.makeText(this,
-                                    "Login Successful.",
-                                    Toast.LENGTH_SHORT)
-                                    .show()
                                 USER_DATA.user_id = firebaseUser.uid
                                 USER_DATA.email_id = email
                                 val intent = Intent(this, HomeActivity::class.java)
@@ -60,6 +56,7 @@ class LoginActivity : AppCompatActivity() {
                                     .show()
                             }
                         }
+
                 }
             }
         }

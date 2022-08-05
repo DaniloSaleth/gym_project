@@ -10,7 +10,7 @@ class ExercicioRepositoryImpl : ExercicioRepository {
     private val data = MutableLiveData<List<Exercicio>>()
     private val gson = Gson()
 
-    override suspend fun getExercicio(): ExercicioRepositoryStatus {
+    override fun getExercicio(): ExercicioRepositoryStatus {
         return try {
             Constants.db.collection("user").document(Constants.USER_DATA.user_id)
                 .addSnapshotListener{ value, _ ->
@@ -26,8 +26,9 @@ class ExercicioRepositoryImpl : ExercicioRepository {
         }
     }
 
-    override suspend fun setExercicio(exercicio: Exercicio): ExercicioRepositoryStatus {
+    override fun setExercicio(exercicio: Exercicio): ExercicioRepositoryStatus {
         return try {
+            getExercicio()
             val map = mutableMapOf<String, Any>(
                 "exercicio" to data.value!!.plus(exercicio)
             )
@@ -40,8 +41,9 @@ class ExercicioRepositoryImpl : ExercicioRepository {
         }
     }
 
-    override suspend fun removeExercicio(exercicio: Exercicio): ExercicioRepositoryStatus {
+    override fun removeExercicio(exercicio: Exercicio): ExercicioRepositoryStatus {
         return try {
+            getExercicio()
             val map = mutableMapOf<String, Any>(
                 "exercicio" to data.value!!.filter { it != exercicio }
             )

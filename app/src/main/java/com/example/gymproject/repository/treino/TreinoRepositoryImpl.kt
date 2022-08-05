@@ -1,6 +1,5 @@
 package com.example.gymproject.repository.treino
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.gymproject.Constants.USER_DATA
 import com.example.gymproject.Constants.db
@@ -23,7 +22,7 @@ class TreinoRepositoryImpl : TreinoRepository {
                 }
 
             TreinoRepositoryStatus.GetTreinoSuccess(data.value!!)
-        } catch (t : Throwable){
+        } catch (t: Throwable) {
             TreinoRepositoryStatus.Error(t)
         }
     }
@@ -35,7 +34,7 @@ class TreinoRepositoryImpl : TreinoRepository {
                 "treino" to data.value!!.plus(treino)
             )
 
-            var teste = db.collection("user").document(USER_DATA.user_id).update(map)
+            db.collection("user").document(USER_DATA.user_id).update(map)
 
             TreinoRepositoryStatus.SetTreinoSuccess("O treino foi criado")
         } catch (t : Throwable){

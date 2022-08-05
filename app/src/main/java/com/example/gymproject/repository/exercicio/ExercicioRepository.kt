@@ -10,7 +10,7 @@ sealed class ExercicioRepositoryStatus{
 }
 
 interface ExercicioRepository {
-    suspend fun getExercicio() : ExercicioRepositoryStatus
-    suspend fun setExercicio(exercicio: Exercicio) : ExercicioRepositoryStatus
-    suspend fun removeExercicio(exercicio: Exercicio) : ExercicioRepositoryStatus
+    fun getExercicio() : ExercicioRepositoryStatus
+    fun setExercicio(exercicio: Exercicio) : ExercicioRepositoryStatus
+    fun removeExercicio(exercicio: Exercicio) : ExercicioRepositoryStatus
 }
