@@ -151,7 +151,7 @@
             android:background="@drawable/search_bar_layout"
             android:fontFamily="@font/roboto"
             android:hint="Digite o nome do treino"
-            android:imeOptions="actionSearch"
+            android:imeOptions="actionNext"
             android:inputType="text"
             android:textColor="@color/et_color"
             android:textCursorDrawable="@color/black"
@@ -176,18 +176,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name">
 
-
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ie_description"
             style="@style/Widget.Design.TextInputLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/search_bar_layout"
             android:fontFamily="@font/roboto"
             android:hint="Descrição"
-            android:imeOptions="actionSearch"
+            android:imeOptions="actionDone"
             android:inputType="text"
-            android:minLines="4"
             android:textColor="@color/et_color"
             android:textCursorDrawable="@color/black"
             android:textSize="14sp" />

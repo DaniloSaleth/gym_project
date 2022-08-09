@@ -5,6 +5,168 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.treinoDetailsActivity">
+    tools:context=".ui.treinoDetails.TreinoDetailsActivity"
+    android:background="@color/searchBarLayout">
+
+
+  <ImageView
+      android:id="@+id/imageView"
+      android:layout_width="match_parent"
+      android:layout_height="180dp"
+      android:layout_marginTop="110dp"
+      android:background="@drawable/bg_search"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <ImageView
+      android:id="@+id/bg_01"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:background="@drawable/login_bg"
+      android:layout_marginBottom="80dp"
+      app:layout_constraintBottom_toBottomOf="@+id/imageView"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <ImageView
+      android:id="@+id/iv_back"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:background="@drawable/ic_arrow_back_24"
+      android:backgroundTint="@color/white"
+      app:layout_constraintBottom_toBottomOf="@+id/iv_appIcon"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/iv_appIcon" />
+
+  <TextView
+      android:id="@+id/tv_appTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:fontFamily="@font/roboto"
+      android:text="@string/app_name"
+      android:textColor="@color/black"
+      android:textSize="22sp"
+      app:layout_constraintBottom_toBottomOf="@+id/iv_appIcon"
+      app:layout_constraintStart_toEndOf="@+id/iv_appIcon"
+      app:layout_constraintTop_toTopOf="@+id/iv_appIcon" />
+
+  <ImageView
+      android:id="@+id/iv_appIcon"
+      android:layout_width="66dp"
+      android:layout_height="66dp"
+      android:layout_marginStart="32dp"
+      android:layout_marginTop="20dp"
+      android:scaleType="fitCenter"
+      android:src="@drawable/gym_logo"
+      app:layout_constraintStart_toEndOf="@+id/iv_back"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+      android:id="@+id/tv_title"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="20dp"
+      android:layout_marginTop="23dp"
+      android:fontFamily="@font/roboto_medium"
+      android:text="Treino"
+      android:maxLines="1"
+      android:textColor="@color/black"
+      android:textSize="26sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/tv_appTitle" />
+
+  <androidx.cardview.widget.CardView
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_margin="12dp"
+      app:cardCornerRadius="300dp"
+      app:layout_constraintBottom_toBottomOf="@+id/imageView"
+      app:layout_constraintEnd_toEndOf="@+id/imageView"
+      app:layout_constraintStart_toStartOf="@+id/imageView"
+      app:layout_constraintTop_toBottomOf="@+id/tv_title" >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="33dp"
+        android:layout_marginTop="22dp">
+      <TextView
+          android:id="@+id/tv_descricao"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:text=" Descrição"
+          />
+    </ScrollView>
+  </androidx.cardview.widget.CardView>
+
+  <androidx.cardview.widget.CardView
+      android:id="@+id/cardView8"
+      android:layout_width="0dp"
+      android:layout_height="340dp"
+      android:layout_marginHorizontal="20dp"
+      android:layout_marginTop="16dp"
+      app:cardCornerRadius="32dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_exercicio"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        tools:listitem="@layout/treino_details_item" />
+
+  </androidx.cardview.widget.CardView>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/btn_deletarTreino"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="20dp"
+      android:layout_marginTop="18dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/cardView8">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_delete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        android:padding="8dp"
+        app:cardCornerRadius="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+      <ImageView
+          android:layout_width="33dp"
+          android:layout_height="33dp"
+          android:layout_margin="3dp"
+          android:background="@drawable/ic_delete_24"
+          android:backgroundTint="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tv_delete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/search_bar_layout"
+        android:backgroundTint="@color/black"
+        android:fontFamily="@font/roboto_medium"
+        android:layout_marginStart="-20dp"
+        android:paddingStart="22dp"
+        android:paddingEnd="5dp"
+        android:text="Deletar Treino"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/cv_delete"
+        app:layout_constraintStart_toEndOf="@+id/cv_delete"
+        app:layout_constraintTop_toTopOf="@+id/cv_delete" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
 
   </androidx.constraintlayout.widget.ConstraintLayout>
