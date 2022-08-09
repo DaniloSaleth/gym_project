@@ -100,6 +100,10 @@ class TreinoActivity : AppCompatActivity() {
 
         viewModel.currentMsg.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT)
+                .show()
+        }
+
+        viewModel.finish.observe(this){
             finish()
         }
 

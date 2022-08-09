@@ -30,6 +30,10 @@ class TreinoViewModel(
     val exercicio: LiveData<List<Exercicio>>
         get() = _exercicio
 
+    private val _finish = MutableLiveData<Boolean>()
+    val finish : LiveData<Boolean>
+        get() = _finish
+
     private val _error = MutableLiveData<Throwable>()
     val error: LiveData<Throwable>
         get() = _error
@@ -77,9 +81,13 @@ class TreinoViewModel(
             when (this) {
                 is TreinoRepositoryStatus.SetTreinoSuccess -> {
                     _currentMsg.value = response
+                    _finish.value = true
                 }
                 is TreinoRepositoryStatus.Error -> {
                     _error.value = response
+                }
+                is TreinoRepositoryStatus.SetTreinoResponse ->{
+                    _currentMsg.value = response
                 }
                 else -> {
 
