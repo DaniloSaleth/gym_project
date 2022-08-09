@@ -50,7 +50,7 @@ class TreinoRepositoryImpl(private val database : FirebaseFirestore) : TreinoRep
         return try {
             getTreino()
             val map = mutableMapOf<String, Any>(
-                "treino" to data.value!!.filter { it != treino }
+                "treino" to data.value!!.filter { it.nome != treino.nome }
             )
 
             database.collection("user").document(USER_DATA.user_id).update(map)

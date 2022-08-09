@@ -19,7 +19,6 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var adapter: HomeAdapter
-    private var isAdapterOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +45,8 @@ class HomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.getTreino()
-        if (isAdapterOn) {
-            adapter.notifyDataSetChanged()
-        }
+        //Entender como o motivo do firebase não carregar sem automaticamente
+        forceRefresh()
     }
 
     private fun startObserver() {
@@ -75,7 +73,6 @@ class HomeActivity : AppCompatActivity() {
         adapter = HomeAdapter(treinos)
         binding.rvTreino.layoutManager = LinearLayoutManager(this, 1, false)
         binding.rvTreino.adapter = adapter
-        isAdapterOn = true
 
         openTreino()
     }
@@ -87,5 +84,11 @@ class HomeActivity : AppCompatActivity() {
                 .putExtra("treino", it)
             ContextCompat.startActivity(binding.root.context, intent, bundle)
         }
+    }
+
+    private fun forceRefresh(){
+        binding.rvTreino.visibility = View.INVISIBLE
+        binding.btnCarregar.visibility = View.VISIBLE
+        binding.tvResultados.text = "0 resultados"
     }
 }
