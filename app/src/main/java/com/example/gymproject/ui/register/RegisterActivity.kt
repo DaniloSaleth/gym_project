@@ -1,12 +1,10 @@
 package com.example.gymproject.ui.register
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.widget.Toast
-import com.example.gymproject.Constants
+import androidx.appcompat.app.AppCompatActivity
 import com.example.gymproject.Constants.USER_DATA
 import com.example.gymproject.Constants.db
 import com.example.gymproject.databinding.ActivityRegisterBinding

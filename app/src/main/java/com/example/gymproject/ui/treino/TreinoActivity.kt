@@ -2,8 +2,11 @@ package com.example.gymproject.ui.treino
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gymproject.databinding.ActivityTreinoBinding
 import com.example.gymproject.model.Exercicio
@@ -25,6 +28,26 @@ class TreinoActivity : AppCompatActivity() {
         binding = ActivityTreinoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        startListener()
+        startObserver()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getExercicio()
+    }
+
+    private fun setupRecyclerView(exercicios: List<Exercicio>) {
+        binding.tvResultados.text = "${exercicios.size} resultados"
+        adapter = TreinoAdapter(exercicios)
+        binding.rvExercicio.layoutManager = LinearLayoutManager(this, 1, false)
+        binding.rvExercicio.adapter = adapter
+
+        addExercicio()
+        removeExercicio()
+    }
+
+    private fun startListener(){
         binding.ivBack.setOnClickListener {
             finish()
         }
@@ -41,28 +64,33 @@ class TreinoActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
             var treino = Treino(binding.ieName.text.toString(),
                 binding.ieDescription.text.toString(),
-                LocalDate.now().toString()
+                LocalDate.now().toString(),
+                viewModel.exerciciosToAdd.value!!
             )
             viewModel.setTreino(treino)
         }
 
-        startObserver()
+        binding.btnCarregar.setOnClickListener {
+            viewModel.getExercicio()
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.getExercicio()
+    private fun addExercicio(){
+        adapter.addExercicioTreino {
+            viewModel.addToTreino(it)
+        }
     }
 
-    private fun setupRecyclerView(exercicios: List<Exercicio>) {
-        binding.tvResultados.text = "${exercicios.size} resultados"
-        adapter = TreinoAdapter(exercicios)
-        binding.rvExercicio.layoutManager = LinearLayoutManager(this, 1, false)
-        binding.rvExercicio.adapter = adapter
+    private fun removeExercicio(){
+        adapter.removeExercicioTreino {
+            viewModel.removeToTreino(it)
+        }
     }
 
     private fun startObserver() {
         viewModel.exercicio.observe(this) {
+            binding.rvExercicio.visibility = View.VISIBLE
+            binding.btnCarregar.visibility = View.GONE
             setupRecyclerView(it)
         }
 
@@ -73,6 +101,11 @@ class TreinoActivity : AppCompatActivity() {
         viewModel.currentMsg.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT)
             finish()
+        }
+
+        viewModel.carregar.observe(this){
+            binding.rvExercicio.visibility = View.INVISIBLE
+            binding.btnCarregar.visibility = View.VISIBLE
         }
     }
 }

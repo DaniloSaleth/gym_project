@@ -1,6 +1,7 @@
 package com.example.gymproject
 
 import android.app.Application
+import com.example.gymproject.di.fireBase
 import com.example.gymproject.di.repository
 import com.example.gymproject.di.viewModels
 import com.example.gymproject.model.UserFirebase
@@ -17,7 +18,7 @@ class MyApp : Application() {
                 androidLogger()
             }
             androidContext(this@MyApp)
-            modules(viewModels, repository)
+            modules(viewModels, repository, fireBase)
         }
     }
 }

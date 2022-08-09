@@ -7,8 +7,10 @@
         <entry key="app/src/main/res/drawable-v24/search_bar_layout.xml" value="0.278" />
         <entry key="app/src/main/res/drawable/bg_home.xml" value="0.278" />
         <entry key="app/src/main/res/drawable/bg_search.xml" value="0.278" />
+        <entry key="app/src/main/res/drawable/ic_add_a_photo_24.xml" value="0.233" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.2295" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2295" />
+        <entry key="app/src/main/res/drawable/img_black_ball.xml" value="0.233" />
         <entry key="app/src/main/res/drawable/login_bg.xml" value="0.1675" />
         <entry key="app/src/main/res/font/roboto.xml" value="0.38645833333333335" />
         <entry key="app/src/main/res/layout/activity_exercicios.xml" value="0.30344202898550726" />

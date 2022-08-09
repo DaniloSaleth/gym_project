@@ -7,17 +7,24 @@ import com.example.gymproject.repository.treino.TreinoRepositoryImpl
 import com.example.gymproject.ui.exercicio.ExercicioViewModel
 import com.example.gymproject.ui.home.HomeViewModel
 import com.example.gymproject.ui.treino.TreinoViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 
 val repository = module {
     single {
-        TreinoRepositoryImpl() as TreinoRepository
+        TreinoRepositoryImpl(get()) as TreinoRepository
     }
 
     single {
-        ExercicioRepositoryImpl() as ExercicioRepository
+        ExercicioRepositoryImpl(get()) as ExercicioRepository
+    }
+}
+
+val fireBase = module{
+    single {
+        FirebaseFirestore.getInstance()
     }
 }
 

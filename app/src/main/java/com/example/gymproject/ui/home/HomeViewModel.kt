@@ -19,7 +19,11 @@ class HomeViewModel(private val repository: TreinoRepository) : ViewModel() {
     val error: LiveData<Throwable>
         get() = _error
 
-    fun getTreino() = viewModelScope.launch{
+    private val _carregar = MutableLiveData<Boolean>()
+    val carregar: LiveData<Boolean>
+        get() = _carregar
+
+    fun getTreino(){
         repository.getTreino().apply {
             when(this){
                 is TreinoRepositoryStatus.GetTreinoSuccess -> {
@@ -29,7 +33,7 @@ class HomeViewModel(private val repository: TreinoRepository) : ViewModel() {
                     _error.value = response
                 }
                 else -> {
-
+                    _carregar.value = true
                 }
             }
         }

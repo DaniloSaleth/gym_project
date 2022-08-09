@@ -3,8 +3,10 @@ package com.example.gymproject.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gymproject.databinding.ActivityHomeBinding
 import com.example.gymproject.model.Treino
@@ -33,6 +35,10 @@ class HomeActivity : AppCompatActivity() {
             )
         }
 
+        binding.btnCarregar.setOnClickListener {
+            viewModel.getTreino()
+        }
+
         startObserver()
     }
 
@@ -43,6 +49,8 @@ class HomeActivity : AppCompatActivity() {
 
     private fun startObserver(){
         viewModel.treino.observe(this){
+            binding.rvTreino.visibility = View.VISIBLE
+            binding.btnCarregar.visibility = View.GONE
             setupRecyclerView(it)
         }
 
@@ -51,6 +59,11 @@ class HomeActivity : AppCompatActivity() {
                 Toast.makeText(this, it.message, Toast.LENGTH_LONG)
             }
         }
+
+        viewModel.carregar.observe(this){
+            binding.rvTreino.visibility = View.INVISIBLE
+            binding.btnCarregar.visibility = View.VISIBLE
+        }
     }
 
     private fun setupRecyclerView(treinos: List<Treino>){
@@ -58,5 +71,14 @@ class HomeActivity : AppCompatActivity() {
             adapter = HomeAdapter(treinos)
             binding.rvTreino.layoutManager = LinearLayoutManager(this,1,false)
             binding.rvTreino.adapter = adapter
+    }
+
+    private fun openTreino(){
+        adapter.openTreinoDetail {
+           /* val bundle = Bundle()
+            val intent = Intent(binding.root.context, MovieDetailActivity::class.java)
+                .putExtra("treino", it)
+            ContextCompat.startActivity(binding.root.context, intent, bundle)*/
+        }
     }
 }
