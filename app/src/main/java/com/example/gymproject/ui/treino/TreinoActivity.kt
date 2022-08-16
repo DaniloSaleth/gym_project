@@ -2,17 +2,14 @@ package com.example.gymproject.ui.treino
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gymproject.databinding.ActivityTreinoBinding
 import com.example.gymproject.model.Exercicio
 import com.example.gymproject.model.Treino
 import com.example.gymproject.ui.exercicio.ExercicioActivity
-import com.example.gymproject.ui.home.HomeAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.LocalDate
 
@@ -22,6 +19,7 @@ class TreinoActivity : AppCompatActivity() {
     private lateinit var adapter: TreinoAdapter
 
     private val viewModel: TreinoViewModel by viewModel()
+    private var isAdapterOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +38,7 @@ class TreinoActivity : AppCompatActivity() {
     private fun setupRecyclerView(exercicios: List<Exercicio>) {
         binding.tvResultados.text = "${exercicios.size} resultados"
         adapter = TreinoAdapter(exercicios)
+        isAdapterOn = true
         binding.rvExercicio.layoutManager = LinearLayoutManager(this, 1, false)
         binding.rvExercicio.adapter = adapter
 
@@ -47,7 +46,7 @@ class TreinoActivity : AppCompatActivity() {
         removeExercicio()
     }
 
-    private fun startListener(){
+    private fun startListener() {
         binding.ivBack.setOnClickListener {
             finish()
         }
@@ -75,19 +74,24 @@ class TreinoActivity : AppCompatActivity() {
         }
     }
 
-    private fun addExercicio(){
+    private fun addExercicio() {
         adapter.addExercicioTreino {
             viewModel.addToTreino(it)
         }
     }
 
-    private fun removeExercicio(){
+    private fun removeExercicio() {
         adapter.removeExercicioTreino {
             viewModel.removeToTreino(it)
         }
     }
 
     private fun startObserver() {
+        viewModel.exerciciosToAdd.observe(this) {
+            if (isAdapterOn) {
+                adapter.mutableListExercicio = it
+            }
+        }
         viewModel.exercicio.observe(this) {
             binding.rvExercicio.visibility = View.VISIBLE
             binding.btnCarregar.visibility = View.GONE
@@ -103,11 +107,11 @@ class TreinoActivity : AppCompatActivity() {
                 .show()
         }
 
-        viewModel.finish.observe(this){
+        viewModel.finish.observe(this) {
             finish()
         }
 
-        viewModel.carregar.observe(this){
+        viewModel.carregar.observe(this) {
             binding.rvExercicio.visibility = View.INVISIBLE
             binding.btnCarregar.visibility = View.VISIBLE
         }

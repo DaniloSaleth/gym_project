@@ -17,6 +17,7 @@ class TreinoAdapter(private val exercicios: List<Exercicio>): RecyclerView.Adapt
     private var removeExercicio : ((Exercicio)->Unit)? = null
     private var exercicioDetails : ((Exercicio)->Unit)? = null
 
+    var mutableListExercicio : List<Exercicio> = listOf()
 
     class ViewHolder(val binding : ExercicioItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -37,6 +38,16 @@ class TreinoAdapter(private val exercicios: List<Exercicio>): RecyclerView.Adapt
                 exercicioDetails?.let {
                     it(exercicios[position])
                 }
+            }
+
+            var isAdd = mutableListExercicio.filter { it.nome == exercicios[position].nome }.isNotEmpty()
+
+            if(isAdd){
+                binding.ivAddExercicio.setBackgroundColor(Color.GREEN)
+                binding.ivRemoveExercicio.setBackgroundColor(Color.WHITE)
+            }else{
+                binding.ivAddExercicio.setBackgroundColor(Color.WHITE)
+                binding.ivRemoveExercicio.setBackgroundColor(Color.RED)
             }
 
             binding.ivAddExercicio.setOnClickListener {

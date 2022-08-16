@@ -51,13 +51,8 @@ class TreinoViewModel(
     }
 
     fun removeToTreino(exercicio: Exercicio) {
-        val valida = _exerciciosToAdd.value!!.filter { it.nome == exercicio.nome }
-
-        if (valida.isNotEmpty()) {
-            var list = _exerciciosToAdd.value!!.minus(exercicio)
+        val list = _exerciciosToAdd.value!!.filter { it.nome != exercicio.nome }
             _exerciciosToAdd.value = list
-
-        }
     }
 
     fun getExercicio() = viewModelScope.launch {
