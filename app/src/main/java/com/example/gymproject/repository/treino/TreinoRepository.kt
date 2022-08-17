@@ -15,4 +15,5 @@ interface TreinoRepository {
     fun getTreino() : TreinoRepositoryStatus
     fun setTreino(treino: Treino) : TreinoRepositoryStatus
     fun removeTreino(treino: Treino) : TreinoRepositoryStatus
+    fun updateTreino(newTreino: Treino, oldTreino: Treino) : TreinoRepositoryStatus
 }

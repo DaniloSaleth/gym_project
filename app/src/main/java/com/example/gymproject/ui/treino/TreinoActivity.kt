@@ -2,6 +2,7 @@ package com.example.gymproject.ui.treino
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,9 @@ class TreinoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTreinoBinding
     private lateinit var adapter: TreinoAdapter
+    private lateinit var treino : Treino
+
+    private var editTreino = false
 
     private val viewModel: TreinoViewModel by viewModel()
     private var isAdapterOn = false
@@ -25,6 +29,14 @@ class TreinoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTreinoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        editTreino = intent.getBooleanExtra("editTreino", false)
+
+        if(editTreino){
+            treino = intent.extras?.get("treino") as Treino
+            binding.ieName.setText(treino.nome)
+            binding.ieDescription.setText(treino.descricao)
+        }
 
         startListener()
         startObserver()
@@ -39,6 +51,10 @@ class TreinoActivity : AppCompatActivity() {
         binding.tvResultados.text = "${exercicios.size} resultados"
         adapter = TreinoAdapter(exercicios)
         isAdapterOn = true
+        if (editTreino){
+            adapter.mutableListExercicio = treino.exercicios
+            viewModel.setListToTreino(treino.exercicios)
+        }
         binding.rvExercicio.layoutManager = LinearLayoutManager(this, 1, false)
         binding.rvExercicio.adapter = adapter
 
@@ -61,12 +77,16 @@ class TreinoActivity : AppCompatActivity() {
         }
 
         binding.btnSave.setOnClickListener {
-            var treino = Treino(binding.ieName.text.toString(),
+            var newTreino = Treino(binding.ieName.text.toString(),
                 binding.ieDescription.text.toString(),
                 LocalDate.now().toString(),
                 viewModel.exerciciosToAdd.value!!
             )
-            viewModel.setTreino(treino)
+            if (editTreino){
+                viewModel.updateTreino(newTreino, treino)
+            }else {
+                viewModel.setTreino(newTreino)
+            }
         }
 
         binding.btnCarregar.setOnClickListener {

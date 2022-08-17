@@ -42,6 +42,10 @@ class TreinoViewModel(
     var exerciciosToAdd = MutableLiveData<List<Exercicio>>()
         get() = _exerciciosToAdd
 
+    fun setListToTreino(exercicios: List<Exercicio>) {
+        _exerciciosToAdd.value = exercicios
+    }
+
     fun addToTreino(exercicio: Exercicio) {
         val valida = _exerciciosToAdd.value!!.filter { it.nome == exercicio.nome }
         if (valida.isEmpty()) {
@@ -73,6 +77,26 @@ class TreinoViewModel(
 
     fun setTreino(treino: Treino) = viewModelScope.launch {
         treinoRepository.setTreino(treino).apply {
+            when (this) {
+                is TreinoRepositoryStatus.SetTreinoSuccess -> {
+                    _currentMsg.value = response
+                    _finish.value = true
+                }
+                is TreinoRepositoryStatus.Error -> {
+                    _error.value = response
+                }
+                is TreinoRepositoryStatus.SetTreinoResponse ->{
+                    _currentMsg.value = response
+                }
+                else -> {
+
+                }
+            }
+        }
+    }
+
+    fun updateTreino(newTreino: Treino, oldTreino : Treino) = viewModelScope.launch {
+        treinoRepository.updateTreino(newTreino,oldTreino).apply {
             when (this) {
                 is TreinoRepositoryStatus.SetTreinoSuccess -> {
                     _currentMsg.value = response

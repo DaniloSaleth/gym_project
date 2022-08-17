@@ -35,9 +35,7 @@ class TreinoRepositoryImpl(private val database: FirebaseFirestore) : TreinoRepo
         return try {
             getTreino()
 
-            var validaTreino = data.value!!.filter { it.nome == treino.nome }
-
-            if (validaTreino.isEmpty()) {
+            if (validaTreino(treino) && validaExercicios(treino) && validaCampos(treino)) {
                 val map = mutableMapOf<String, Any>(
                     "treino" to data.value!!.plus(treino)
                 )
@@ -45,6 +43,10 @@ class TreinoRepositoryImpl(private val database: FirebaseFirestore) : TreinoRepo
                 database.collection("user").document(USER_DATA.user_id).update(map)
 
                 TreinoRepositoryStatus.SetTreinoSuccess("Treino criado")
+            } else if (!validaCampos(treino)) {
+                TreinoRepositoryStatus.SetTreinoResponse("Preencha todos os campos")
+            } else if (!validaExercicios(treino)) {
+                TreinoRepositoryStatus.SetTreinoResponse("Adicione exercícios ao seu treino")
             } else {
                 TreinoRepositoryStatus.SetTreinoResponse("Já existe um treino com esse nome!")
             }
@@ -66,5 +68,43 @@ class TreinoRepositoryImpl(private val database: FirebaseFirestore) : TreinoRepo
         } catch (t: Throwable) {
             TreinoRepositoryStatus.Error(t)
         }
+    }
+
+    override fun updateTreino(newTreino: Treino, oldTreino: Treino): TreinoRepositoryStatus {
+        return try {
+            getTreino()
+            var validaNome = newTreino.nome == oldTreino.nome || validaTreino(newTreino)
+
+            if (validaExercicios(newTreino) && validaCampos(newTreino) && validaNome) {
+                var list = data.value!!.filter { it.nome != oldTreino.nome }
+                val map = mutableMapOf<String, Any>(
+                    "treino" to list.plus(newTreino)
+                )
+
+                database.collection("user").document(USER_DATA.user_id).update(map)
+
+                TreinoRepositoryStatus.SetTreinoSuccess("Treino Editado")
+            } else if (!validaCampos(newTreino)) {
+                TreinoRepositoryStatus.SetTreinoResponse("Preencha todos os campos")
+            } else if (!validaExercicios(newTreino)) {
+                TreinoRepositoryStatus.SetTreinoResponse("Adicione exercícios ao seu treino")
+            } else {
+                TreinoRepositoryStatus.SetTreinoResponse("Já existe um treino com esse nome!")
+            }
+        } catch (t: Throwable) {
+            TreinoRepositoryStatus.Error(t)
+        }
+    }
+
+    private fun validaTreino(treino: Treino): Boolean {
+        return data.value!!.filter { it.nome == treino.nome }.isEmpty()
+    }
+
+    private fun validaCampos(treino: Treino): Boolean {
+        return treino.nome != null && treino.nome.isNotEmpty() && treino.descricao.isNotEmpty() && treino.descricao != null
+    }
+
+    private fun validaExercicios(treino: Treino): Boolean {
+        return treino.exercicios.isNotEmpty()
     }
 }

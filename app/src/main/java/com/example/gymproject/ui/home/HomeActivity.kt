@@ -27,12 +27,9 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnAddTreino.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    TreinoActivity::class.java
-                )
-            )
+            var intent = Intent(this,TreinoActivity::class.java)
+                .putExtra("editTreino", false)
+            startActivity(intent)
         }
 
         binding.btnCarregar.setOnClickListener {
