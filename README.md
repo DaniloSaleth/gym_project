@@ -1,16 +1,16 @@
-##Sistema de autenticação
+<h1>Sistema de autenticação</h1>
 <p align="center">
   <img width = "200" src="to_readme/gym_auth.gif">
 </p>
-##Novo Exercício
+<h1>Novo Exercício</h1>
 <p align="center">
   <img width = "200" src="to_readme/gym_new_exercise.gif">
 </p>
-##Novo Treino
+<h1>Novo Treino</h1>
 <p align="center">
   <img width = "200" src="to_readme/gym_new_treino.gif">
 </p>
-##Editar Treino
+<h1>Editar Treino</h1>
 <p align="center">
   <img width = "200" src="to_readme/gym_edit_treino.gif">
 </p>
