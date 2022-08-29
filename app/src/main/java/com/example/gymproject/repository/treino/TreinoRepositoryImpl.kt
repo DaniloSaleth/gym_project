@@ -49,7 +49,7 @@ class TreinoRepositoryImpl(private val database: FirebaseFirestore) : TreinoRepo
     override suspend fun setTreino(treino: Treino): TreinoRepositoryStatus {
         return try {
             getTreino()
-
+            treino.id = getId(data.value)
             if (validaTreino(treino) && validaExercicios(treino) && validaCampos(treino)) {
                 val map = mutableMapOf<String, Any>(
                     "treino" to data.value!!.plus(treino)
@@ -109,6 +109,20 @@ class TreinoRepositoryImpl(private val database: FirebaseFirestore) : TreinoRepo
         } catch (t: Throwable) {
             TreinoRepositoryStatus.Error(t)
         }
+    }
+
+    private fun getId (list: List<Treino>?) : Int{
+        var newId = 0
+        do {
+            var notFound = true
+            val verifyId = list?.filter { it.id == newId }
+            if (verifyId?.isEmpty() == true){
+                notFound = false
+            } else{
+                newId++
+            }
+        }while (notFound)
+        return newId
     }
 
     private fun validaTreino(treino: Treino): Boolean {

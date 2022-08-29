@@ -5,6 +5,7 @@ import com.example.gymproject.Constants
 import com.example.gymproject.Constants.USER_DATA
 import com.example.gymproject.model.Exercicio
 import com.example.gymproject.model.FirebaseData
+import com.example.gymproject.model.Treino
 import com.example.gymproject.repository.treino.TreinoRepositoryStatus
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -41,6 +42,7 @@ class ExercicioRepositoryImpl(private val database: FirebaseFirestore) : Exercic
     override suspend fun setExercicio(exercicio: Exercicio): ExercicioRepositoryStatus {
         return try {
             getExercicio()
+            exercicio.id = getId(data.value)
             val map = mutableMapOf<String, Any>(
                 "exercicio" to data.value!!.plus(exercicio)
             )
@@ -66,5 +68,19 @@ class ExercicioRepositoryImpl(private val database: FirebaseFirestore) : Exercic
         } catch (t: Throwable) {
             ExercicioRepositoryStatus.Error(t)
         }
+    }
+
+    private fun getId (list: List<Exercicio>?) : Int{
+        var newId = 0
+        do {
+            var notFound = true
+            val verifyId = list?.filter { it.id == newId }
+            if (verifyId?.isEmpty() == true){
+                notFound = false
+            } else{
+                newId++
+            }
+        }while (notFound)
+        return newId
     }
 }

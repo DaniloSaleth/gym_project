@@ -77,7 +77,7 @@ class TreinoActivity : AppCompatActivity() {
         }
 
         binding.btnSave.setOnClickListener {
-            var newTreino = Treino(binding.ieName.text.toString(),
+            var newTreino = Treino(0,binding.ieName.text.toString(),
                 binding.ieDescription.text.toString(),
                 LocalDate.now().toString(),
                 viewModel.exerciciosToAdd.value!!

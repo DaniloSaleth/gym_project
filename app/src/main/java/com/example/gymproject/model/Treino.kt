@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class Treino (
+    var id : Int,
     val nome : String,
     val descricao : String,
     val data : String,

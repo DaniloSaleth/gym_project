@@ -44,6 +44,7 @@ class ExercicioActivity : AppCompatActivity() {
             val now = Date()
             fileName = formatter.format(now)
             val exercicio = Exercicio(
+                0,
                 binding.ieName.text.toString(),
                 "https://firebasestorage.googleapis.com/v0/b/gym-p-bba6d.appspot.com/o/images%2F$fileName?alt=media",
                 binding.ieDescription.text.toString()
