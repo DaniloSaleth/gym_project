@@ -88,10 +88,6 @@ class TreinoActivity : AppCompatActivity() {
                 viewModel.setTreino(newTreino)
             }
         }
-
-        binding.btnCarregar.setOnClickListener {
-            viewModel.getExercicio()
-        }
     }
 
     private fun addExercicio() {
@@ -113,8 +109,6 @@ class TreinoActivity : AppCompatActivity() {
             }
         }
         viewModel.exercicio.observe(this) {
-            binding.rvExercicio.visibility = View.VISIBLE
-            binding.btnCarregar.visibility = View.GONE
             setupRecyclerView(it)
         }
 
@@ -129,11 +123,6 @@ class TreinoActivity : AppCompatActivity() {
 
         viewModel.finish.observe(this) {
             finish()
-        }
-
-        viewModel.carregar.observe(this) {
-            binding.rvExercicio.visibility = View.INVISIBLE
-            binding.btnCarregar.visibility = View.VISIBLE
         }
     }
 }

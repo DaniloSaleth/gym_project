@@ -1,37 +1,52 @@
 package com.example.gymproject.repository.treino
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.gymproject.Constants.USER_DATA
 import com.example.gymproject.model.FirebaseData
 import com.example.gymproject.model.Treino
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import kotlinx.coroutines.tasks.await
 
 class TreinoRepositoryImpl(private val database: FirebaseFirestore) : TreinoRepository {
     private val data = MutableLiveData<List<Treino>>()
     private val gson = Gson()
 
-    override fun getTreino(): TreinoRepositoryStatus {
+    override suspend fun getTreino(): TreinoRepositoryStatus {
         return try {
             database.collection("user").document(USER_DATA.user_id)
-                .addSnapshotListener { value, errorFireBase ->
-                    var listaFirebase = gson.toJson(value?.data).toString()
-                    var listas = gson.fromJson(listaFirebase, FirebaseData::class.java)
+                .get().addOnCompleteListener {
+                    if(it.isSuccessful) {
+                        var listaFirebase = gson.toJson(it.result.data).toString()
+                        var listas = gson.fromJson(listaFirebase, FirebaseData::class.java)
 
-                    data.value = listas.treino
-                }
-            TreinoRepositoryStatus.GetTreinoSuccess(data.value!!)
+                        data.value = listas.treino
+                    }
+                }.continueWith {
+                    TreinoRepositoryStatus.GetTreinoSuccess(data.value!!)
+                }.await()
         } catch (t: Throwable) {
-            if (t != null) {
                 TreinoRepositoryStatus.Error(t)
-            } else {
-                TreinoRepositoryStatus.Carregar
-            }
         }
     }
 
-    override fun setTreino(treino: Treino): TreinoRepositoryStatus {
+    override suspend fun getTreinoByName(name: String): TreinoRepositoryStatus {
+        return try {
+            database.collection("user").document(USER_DATA.user_id)
+                .get().addOnCompleteListener{ value ->
+                    var listaFirebase = gson.toJson(value.result.data).toString()
+                    var listas = gson.fromJson(listaFirebase, FirebaseData::class.java)
+                    var response = listas.treino.filter { it.nome.contains(name) }
+                    data.value = response
+                }.continueWith {
+                    TreinoRepositoryStatus.GetTreinoSuccess(data.value!!)
+                }.await()
+        } catch (t: Throwable) {
+            TreinoRepositoryStatus.Error(t)
+        }
+    }
+
+    override suspend fun setTreino(treino: Treino): TreinoRepositoryStatus {
         return try {
             getTreino()
 
@@ -55,7 +70,7 @@ class TreinoRepositoryImpl(private val database: FirebaseFirestore) : TreinoRepo
         }
     }
 
-    override fun removeTreino(treino: Treino): TreinoRepositoryStatus {
+    override suspend fun removeTreino(treino: Treino): TreinoRepositoryStatus {
         return try {
             getTreino()
             val map = mutableMapOf<String, Any>(
@@ -70,7 +85,7 @@ class TreinoRepositoryImpl(private val database: FirebaseFirestore) : TreinoRepo
         }
     }
 
-    override fun updateTreino(newTreino: Treino, oldTreino: Treino): TreinoRepositoryStatus {
+    override suspend fun updateTreino(newTreino: Treino, oldTreino: Treino): TreinoRepositoryStatus {
         return try {
             getTreino()
             var validaNome = newTreino.nome == oldTreino.nome || validaTreino(newTreino)
@@ -101,7 +116,7 @@ class TreinoRepositoryImpl(private val database: FirebaseFirestore) : TreinoRepo
     }
 
     private fun validaCampos(treino: Treino): Boolean {
-        return treino.nome != null && treino.nome.isNotEmpty() && treino.descricao.isNotEmpty() && treino.descricao != null
+        return treino.nome.isNotEmpty()
     }
 
     private fun validaExercicios(treino: Treino): Boolean {

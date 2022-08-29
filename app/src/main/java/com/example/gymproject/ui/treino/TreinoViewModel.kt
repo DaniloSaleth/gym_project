@@ -22,10 +22,6 @@ class TreinoViewModel(
     val currentMsg: LiveData<String>
         get() = _currentMsg
 
-    private val _carregar = MutableLiveData<Boolean>()
-    val carregar: LiveData<Boolean>
-        get() = _carregar
-
     private val _exercicio = MutableLiveData<List<Exercicio>>()
     val exercicio: LiveData<List<Exercicio>>
         get() = _exercicio
@@ -69,7 +65,6 @@ class TreinoViewModel(
                     _error.value = response
                 }
                 else -> {
-                    _carregar.value = true
                 }
             }
         }

@@ -7,13 +7,13 @@ sealed class TreinoRepositoryStatus{
     data class SetTreinoSuccess(val response: String) : TreinoRepositoryStatus()
     data class SetTreinoResponse(val response: String) : TreinoRepositoryStatus()
     data class RemoveTreinoSuccess(val response: String) : TreinoRepositoryStatus()
-    object Carregar : TreinoRepositoryStatus()
     data class Error(val response : Throwable) : TreinoRepositoryStatus()
 }
 
 interface TreinoRepository {
-    fun getTreino() : TreinoRepositoryStatus
-    fun setTreino(treino: Treino) : TreinoRepositoryStatus
-    fun removeTreino(treino: Treino) : TreinoRepositoryStatus
-    fun updateTreino(newTreino: Treino, oldTreino: Treino) : TreinoRepositoryStatus
+    suspend fun getTreino() : TreinoRepositoryStatus
+    suspend fun getTreinoByName(name : String) : TreinoRepositoryStatus
+    suspend fun setTreino(treino: Treino) : TreinoRepositoryStatus
+    suspend fun removeTreino(treino: Treino) : TreinoRepositoryStatus
+    suspend fun updateTreino(newTreino: Treino, oldTreino: Treino) : TreinoRepositoryStatus
 }

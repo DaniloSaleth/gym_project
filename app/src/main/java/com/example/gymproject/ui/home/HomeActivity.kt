@@ -2,15 +2,16 @@ package com.example.gymproject.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gymproject.databinding.ActivityHomeBinding
 import com.example.gymproject.model.Treino
-import com.example.gymproject.ui.treinoDetails.TreinoDetailsActivity
 import com.example.gymproject.ui.treino.TreinoActivity
+import com.example.gymproject.ui.treinoDetails.TreinoDetailsActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeActivity : AppCompatActivity() {
@@ -26,42 +27,44 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupListener()
+        startObserver()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getTreino()
+    }
+
+    private fun setupListener(){
         binding.btnAddTreino.setOnClickListener {
             var intent = Intent(this,TreinoActivity::class.java)
                 .putExtra("editTreino", false)
             startActivity(intent)
         }
 
-        binding.btnCarregar.setOnClickListener {
-            viewModel.getTreino()
+        binding.ieSearchTreino.setOnEditorActionListener { textView, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH){
+                if (currentFocus != null) {
+                    val inputMethodManager: InputMethodManager =
+                        getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+                }
+                viewModel.getTreinoByName(textView.text.toString())
+                true
+            }
+            false
         }
-
-        startObserver()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.getTreino()
-        //Entender como o motivo do firebase não carregar sem automaticamente
-        forceRefresh()
     }
 
     private fun startObserver() {
         viewModel.treino.observe(this) {
-            binding.rvTreino.visibility = View.VISIBLE
-            binding.btnCarregar.visibility = View.GONE
             setupRecyclerView(it)
         }
 
         viewModel.error.observe(this) {
-            if (it.message != null) {
-                Toast.makeText(this, it.message, Toast.LENGTH_LONG)
-            }
-        }
-
-        viewModel.carregar.observe(this) {
-            binding.rvTreino.visibility = View.INVISIBLE
-            binding.btnCarregar.visibility = View.VISIBLE
+            Toast.makeText(this, it.message, Toast.LENGTH_LONG)
         }
     }
 
@@ -81,11 +84,5 @@ class HomeActivity : AppCompatActivity() {
                 .putExtra("treino", it)
             ContextCompat.startActivity(binding.root.context, intent, bundle)
         }
-    }
-
-    private fun forceRefresh(){
-        binding.rvTreino.visibility = View.INVISIBLE
-        binding.btnCarregar.visibility = View.VISIBLE
-        binding.tvResultados.text = "0 resultados"
     }
 }

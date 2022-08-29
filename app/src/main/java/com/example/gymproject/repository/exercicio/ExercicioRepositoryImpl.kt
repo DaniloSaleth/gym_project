@@ -9,6 +9,7 @@ import com.example.gymproject.repository.treino.TreinoRepositoryStatus
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -17,16 +18,17 @@ class ExercicioRepositoryImpl(private val database: FirebaseFirestore) : Exercic
     private val error = MutableLiveData<Throwable>()
     private val gson = Gson()
 
-    override fun getExercicio(): ExercicioRepositoryStatus {
+    override suspend fun getExercicio(): ExercicioRepositoryStatus {
         return try {
             database.collection("user").document(Constants.USER_DATA.user_id)
-                .addSnapshotListener { value, _ ->
-                    var listaFirebase = gson.toJson(value?.data).toString()
+                .get().addOnCompleteListener{ value ->
+                    var listaFirebase = gson.toJson(value.result.data).toString()
                     var listas = gson.fromJson(listaFirebase, FirebaseData::class.java)
 
                     data.value = listas.exercicio
-                }
-            ExercicioRepositoryStatus.GetExercicioSuccess(data.value!!)
+                }.continueWith {
+                    ExercicioRepositoryStatus.GetExercicioSuccess(data.value!!)
+                }.await()
         }catch (t:Throwable){
             if (t != null) {
                 ExercicioRepositoryStatus.Error(t)
@@ -36,7 +38,7 @@ class ExercicioRepositoryImpl(private val database: FirebaseFirestore) : Exercic
         }
     }
 
-    override fun setExercicio(exercicio: Exercicio): ExercicioRepositoryStatus {
+    override suspend fun setExercicio(exercicio: Exercicio): ExercicioRepositoryStatus {
         return try {
             getExercicio()
             val map = mutableMapOf<String, Any>(
@@ -51,7 +53,7 @@ class ExercicioRepositoryImpl(private val database: FirebaseFirestore) : Exercic
         }
     }
 
-    override fun removeExercicio(exercicio: Exercicio): ExercicioRepositoryStatus {
+    override suspend fun removeExercicio(exercicio: Exercicio): ExercicioRepositoryStatus {
         return try {
             getExercicio()
             val map = mutableMapOf<String, Any>(
