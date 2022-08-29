@@ -96,13 +96,23 @@ class ExercicioActivity : AppCompatActivity() {
     }
 
     private fun startObserver() {
-        viewModel.currentMsg.observe(this) {
+        viewModel.error.observe(this) {
+            Toast.makeText(this, it.message, Toast.LENGTH_LONG)
+        }
+
+        viewModel.onSuccess.observe(this){
             Toast.makeText(this, it, Toast.LENGTH_SHORT)
+                .show()
             if (imageChanged) {
                 uploadImage(fileName)
             }else {
                 finish()
             }
+        }
+
+        viewModel.currentMsg.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT)
+                .show()
         }
     }
 }

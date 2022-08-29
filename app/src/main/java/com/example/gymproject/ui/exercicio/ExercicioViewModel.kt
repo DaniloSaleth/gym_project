@@ -16,6 +16,10 @@ class ExercicioViewModel(val exercicioRepository: ExercicioRepository) : ViewMod
     val currentMsg: LiveData<String>
         get() = _currentMsg
 
+    private val _onSuccess = MutableLiveData<String>()
+    val onSuccess: LiveData<String>
+        get() = _onSuccess
+
     private val _error = MutableLiveData<Throwable>()
     val error: LiveData<Throwable>
         get() = _error
@@ -24,6 +28,9 @@ class ExercicioViewModel(val exercicioRepository: ExercicioRepository) : ViewMod
         exercicioRepository.setExercicio(exercicio).apply {
             when (this) {
                 is ExercicioRepositoryStatus.SetExercicioSuccess -> {
+                    _onSuccess.value = response
+                }
+                is ExercicioRepositoryStatus.SetExercicioResponse-> {
                     _currentMsg.value = response
                 }
                 is ExercicioRepositoryStatus.Error -> {
